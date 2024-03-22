@@ -1,4 +1,4 @@
-name: Check
+name: git-pr-release
 
 on:
   push:
@@ -6,30 +6,37 @@ on:
       - develop
       - qa
 
+permissions:
+  pull-requests: write
+
 jobs:
-  check:
+  release-pr:
     runs-on: ubuntu-latest
     steps:
       - name: Setup env for QA
         run: |
           echo "GIT_PR_RELEASE_BRANCH_STAGING=develop" >> $GITHUB_ENV
-          echo "GIT_PR_RELEASE_BRANCH_PRODUCTIOn=qa" >> $GITHUB_ENV
-        if: github.ref == "refs/heads/develop"
+          echo "GIT_PR_RELEASE_BRANCH_PRODUCTION=qa" >> $GITHUB_ENV
+        if: ${{ github.ref == 'refs/heads/develop' }}
 
       - name: Setup env for Production
         run: |
           echo "GIT_PR_RELEASE_BRANCH_STAGING=qa" >> $GITHUB_ENV
-          echo "GIT_PR_RELEASE_BRANCH_PRODUCTIOn=main" >> $GITHUB_ENV
-        if: github.ref == "refs/heads/qa"
+          echo "GIT_PR_RELEASE_BRANCH_PRODUCTION=main" >> $GITHUB_ENV
+        if: ${{ github.ref == 'refs/heads/qa' }}
 
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: develop
+          fetch-depth: 0 # git-pr-releaseはこれが必要
 
-      - name: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.3
           bundler-cache: true
+
       - name: git-pr-release
         run: bundle exec git-pr-release
-        
-
+        env:
+          GIT_PR_RELEASE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
