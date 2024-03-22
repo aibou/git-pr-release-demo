@@ -25,10 +25,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.3
           bundler-cache: true
+
       - name: git-pr-release
         run: bundle exec git-pr-release
         
