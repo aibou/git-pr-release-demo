@@ -13,13 +13,13 @@ jobs:
       - name: Setup env for QA
         run: |
           echo "GIT_PR_RELEASE_BRANCH_STAGING=develop" >> $GITHUB_ENV
-          echo "GIT_PR_RELEASE_BRANCH_PRODUCTIOn=qa" >> $GITHUB_ENV
+          echo "GIT_PR_RELEASE_BRANCH_PRODUCTION=qa" >> $GITHUB_ENV
         if: ${{ github.ref == 'refs/heads/develop' }}
 
       - name: Setup env for Production
         run: |
           echo "GIT_PR_RELEASE_BRANCH_STAGING=qa" >> $GITHUB_ENV
-          echo "GIT_PR_RELEASE_BRANCH_PRODUCTIOn=main" >> $GITHUB_ENV
+          echo "GIT_PR_RELEASE_BRANCH_PRODUCTION=main" >> $GITHUB_ENV
         if: ${{ github.ref == 'refs/heads/qa' }}
 
       - name: Checkout
