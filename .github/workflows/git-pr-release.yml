@@ -24,6 +24,8 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # git-pr-releaseはこれが必要
 
       - name: ruby/setup-ruby@v1
         with:
