@@ -9,6 +9,8 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - name: Setup env for QA
         run: |
@@ -32,5 +34,5 @@ jobs:
 
       - name: git-pr-release
         run: bundle exec git-pr-release
-        
-
+        env:
+          GIT_PR_RELEASE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
